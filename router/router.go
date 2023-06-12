@@ -13,5 +13,5 @@ func SetupRouter() *gin.Engine {
 }
 
 func handleRoot(c *gin.Context) {
-	c.String(http.StatusOK, "Hello, World!")
+	c.String(http.StatusOK, "Hello, World")
 }
