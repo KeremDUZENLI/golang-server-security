@@ -15,7 +15,6 @@ func main() {
 	wg.Add(env.NUMREQUEST)
 
 	client := &http.Client{}
-
 	r := router.SetupRouter()
 
 	go func() {
