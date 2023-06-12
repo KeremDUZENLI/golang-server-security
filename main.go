@@ -8,13 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
+var (
 	targetURL   = "http://localhost:8080/"
 	numRequests = 1000
 	concurrency = 100
-)
 
-var (
 	port  = ":8080"
 	count = 0
 )
@@ -25,8 +23,7 @@ func main() {
 
 	client := &http.Client{}
 
-	router := gin.Default()
-	router.GET("/", handleRoot)
+	router := setupRouter()
 
 	go func() {
 		err := router.Run(port)
@@ -56,21 +53,32 @@ func sendRequest(wg *sync.WaitGroup, client *http.Client) {
 	}
 
 	for {
+		if count >= numRequests {
+			break
+		}
+
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("Error sending request:", err)
 			return
 		}
 		resp.Body.Close()
+
+		requestCounter()
 	}
+}
+
+func setupRouter() *gin.Engine {
+	router := gin.Default()
+	router.GET("/", handleRoot)
+	return router
 }
 
 func handleRoot(c *gin.Context) {
 	c.String(http.StatusOK, "Hello, World!")
-	requestCounter()
 }
 
 func requestCounter() {
-	fmt.Printf("%v. Request\t", count)
 	count++
+	fmt.Printf("%v. Request\t", count)
 }
