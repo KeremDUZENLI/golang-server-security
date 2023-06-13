@@ -2,6 +2,10 @@ package router
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
+
+	"seguro/env"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,5 +17,14 @@ func SetupRouter() *gin.Engine {
 }
 
 func handleRoot(c *gin.Context) {
-	c.String(http.StatusOK, "Hello, World")
+	env.COUNTER++
+	env.LISTE = append(env.LISTE, env.COUNTER)
+
+	numbers := make([]string, len(env.LISTE))
+	for i, num := range env.LISTE {
+		numbers[i] = strconv.Itoa(num)
+	}
+
+	response := strings.Join(numbers, ".Request\n")
+	c.String(http.StatusOK, response)
 }

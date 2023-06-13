@@ -1,24 +1,60 @@
 package env
 
 import (
+	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 var (
-	URL         string
-	PORT        string
+	DECIDE int
+
+	URL  string
+	PORT string
+
 	CONCURRENCY int
 	NUMREQUEST  int
+
+	COUNTER int
+	LISTE   []int
 )
 
 func Load() {
-	godotenv.Load(".env")
+	printScan("WELCOME TO THE HELL")
+	printScan("PRESS 1 FOR LOCAL TEST", &DECIDE)
 
-	URL = "http://localhost:" + os.Getenv("URL")
-	PORT = ":" + os.Getenv("PORT")
-	CONCURRENCY, _ = strconv.Atoi(os.Getenv("CONCURRENCY"))
-	NUMREQUEST, _ = strconv.Atoi(os.Getenv("NUMREQUEST"))
+	if DECIDE == 1 {
+		loadEnv()
+	} else {
+		printScan("URL", &URL)
+	}
+
+	printScan("CONCURRENCY", &CONCURRENCY)
+	printScan("NUMREQUEST", &NUMREQUEST)
+	printScan("PRESS ENTER", nil)
+}
+
+func loadEnv() {
+	godotenv.Load(".env")
+	URL = os.Getenv("URL")
+	PORT = os.Getenv("PORT")
+}
+
+func printScan(varName string, name ...any) {
+	if len(name) == 0 {
+		fmt.Printf("%s\n", varName)
+	} else {
+		switch value := name[0].(type) {
+		case *string:
+			fmt.Printf("\n%s: ", varName)
+			fmt.Scanln(value)
+		case *int:
+			fmt.Printf("\n%s: ", varName)
+			fmt.Scanln(value)
+		case nil:
+			fmt.Printf("\n%s ", varName)
+			fmt.Scanln()
+		}
+	}
 }
