@@ -10,19 +10,11 @@ import (
 	"seguro/router"
 )
 
+var wg sync.WaitGroup
+
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(env.NUMREQUEST)
-
-	client := &http.Client{}
-
-	count := 0
 	for i := 0; i < env.NUMREQUEST; i++ {
-		go request.SendRequest(&wg, client, &count)
-		if i%env.CONCURRENCY == 0 {
-			wg.Wait()
-		}
-		fmt.Printf("\n%v. Request", i)
+		go requestSender()
 	}
 
 	wg.Wait()
@@ -44,4 +36,13 @@ func setup() {
 			fmt.Println("Error starting server:", err)
 		}
 	}()
+}
+
+func requestSender() {
+	wg.Add(env.NUMREQUEST)
+
+	client := &http.Client{}
+
+	defer wg.Done()
+	request.SendRequest(&wg, client)
 }
