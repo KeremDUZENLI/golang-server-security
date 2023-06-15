@@ -21,10 +21,10 @@ func PrintScan(varName string, name ...any) {
 	} else {
 		switch value := name[0].(type) {
 		case *string:
-			fmt.Printf("\n%s: ", varName)
+			fmt.Printf("%s: ", varName)
 			fmt.Scanln(value)
 		case *int:
-			fmt.Printf("\n%s: ", varName)
+			fmt.Printf("%s: ", varName)
 			fmt.Scanln(value)
 		case nil:
 			fmt.Printf("\n%s ", varName)

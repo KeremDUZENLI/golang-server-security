@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	count int = 0
+	count int = 1
 	liste []int
 )
 
@@ -38,8 +38,8 @@ func numbersListConvertString() []string {
 }
 
 func numbersList() {
-	if env.NUMREQUEST >= count {
+	if count <= env.NUMREQUEST {
 		liste = append(liste, count)
-		count++
 	}
+	count++
 }
