@@ -17,7 +17,7 @@ var (
 
 func main() {
 	for i := 0; i < env.NUMREQUEST; i++ {
-		go requestSender()
+		requestSender()
 	}
 
 	wg.Wait()
@@ -33,7 +33,7 @@ func load() {
 
 	if decide == 1 {
 		env.LoadLocalEnvFile()
-		go setup()
+		setup()
 	} else {
 		env.PrintScan("URL", &env.URL)
 	}

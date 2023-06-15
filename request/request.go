@@ -16,12 +16,10 @@ func SendRequest(wg *sync.WaitGroup, client *http.Client) {
 		return
 	}
 
-	for env.LOOPER {
-		resp, err := client.Do(req)
-		if err != nil {
-			fmt.Println("Error sending request:", err)
-			return
-		}
-		resp.Body.Close()
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return
 	}
+	resp.Body.Close()
 }

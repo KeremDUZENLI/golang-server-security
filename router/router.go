@@ -10,6 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	count int = 0
+	liste []int
+)
+
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/", handleRoot)
@@ -25,18 +30,16 @@ func handleRoot(c *gin.Context) {
 func numbersListConvertString() []string {
 	numbersList()
 
-	numbers := make([]string, len(env.LISTE))
-	for i, num := range env.LISTE {
+	numbers := make([]string, len(liste))
+	for i, num := range liste {
 		numbers[i] = strconv.Itoa(num)
 	}
 	return numbers
 }
 
 func numbersList() {
-	env.COUNTER++
-
-	if env.NUMREQUEST >= env.COUNTER {
-		env.LISTE = append(env.LISTE, env.COUNTER)
-		env.LOOPER = true
+	if env.NUMREQUEST >= count {
+		liste = append(liste, count)
+		count++
 	}
 }

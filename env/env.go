@@ -13,10 +13,6 @@ var (
 
 	CONCURRENCY int
 	NUMREQUEST  int
-
-	COUNTER int = 0
-	LISTE   []int
-	LOOPER  bool = false
 )
 
 func PrintScan(varName string, name ...any) {
