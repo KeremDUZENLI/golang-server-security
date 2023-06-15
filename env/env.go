@@ -1,39 +1,29 @@
 package env
 
 import (
-	"fmt"
 	"os"
+
+	"seguro/common"
 
 	"github.com/joho/godotenv"
 )
 
 var (
-	URL  string
-	PORT string
-
-	CONCURRENCY int
-	NUMREQUEST  int
+	NUMBERREQUEST int
+	CONCURRENCY   int
+	URL           string
+	PORT          string
 )
 
-func PrintScan(varName string, name ...any) {
-	if len(name) == 0 {
-		fmt.Printf("%s\n", varName)
-	} else {
-		switch value := name[0].(type) {
-		case *string:
-			fmt.Printf("%s: ", varName)
-			fmt.Scanln(value)
-		case *int:
-			fmt.Printf("%s: ", varName)
-			fmt.Scanln(value)
-		case nil:
-			fmt.Printf("\n%s ", varName)
-			fmt.Scanln()
-		}
-	}
+func LoadValuesGiven() {
+	common.PrintScan("WELCOME TO THE HELL")
+
+	common.PrintScan("NUMBERREQUEST", &NUMBERREQUEST)
+	common.PrintScan("CONCURRENCY", &CONCURRENCY)
+	common.PrintScan("URL (For Local Empty)", &URL)
 }
 
-func LoadLocalEnvFile() {
+func LoadValuesEnvFile() {
 	godotenv.Load(".env")
 	URL = os.Getenv("URL")
 	PORT = os.Getenv("PORT")

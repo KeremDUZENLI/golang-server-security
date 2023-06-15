@@ -1,8 +1,9 @@
 package request
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
+	"seguro/common"
 	"seguro/env"
 	"sync"
 )
@@ -10,16 +11,31 @@ import (
 func SendRequest(wg *sync.WaitGroup, client *http.Client) {
 	defer wg.Done()
 
-	req, err := http.NewRequest("GET", env.URL, nil)
+	request, err := httpRequest()
+	common.PrintError(err)
+
+	response := httpResponse(client, request)
+	common.PrintError(response)
+}
+
+func httpRequest() (*http.Request, error) {
+	request, err := http.NewRequest("GET", env.URL, nil)
 	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return
+		return nil, errors.New("\n!failed to send request")
 	}
 
-	resp, err := client.Do(req)
+	return request, nil
+}
+
+func httpResponse(client *http.Client, request *http.Request) error {
+	response, err := client.Do(request)
 	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return
+		return errors.New("\n!failed to get response")
 	}
-	resp.Body.Close()
+
+	if responseBody := response.Body.Close(); responseBody != nil {
+		return errors.New("\n!failed to get responseBody")
+	}
+
+	return nil
 }

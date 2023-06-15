@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"seguro/common"
 	"seguro/env"
 	"seguro/request"
 	"seguro/router"
@@ -19,37 +20,27 @@ var (
 )
 
 func main() {
-	for i := 1; i <= env.NUMREQUEST; i++ {
+	for i := 1; i <= env.NUMBERREQUEST; i++ {
 		go requestSender()
 		requestCounterToScreen(i)
 	}
 
-	env.PrintScan("PRESS ENTER TO START", nil)
+	common.PrintScan("PRESS ENTER TO START", nil)
 	close(storeChannels)
 	wg.Wait()
 }
 
 func init() {
-	load()
+	env.LoadValuesGiven()
 	if env.URL == "" {
-		env.LoadLocalEnvFile()
-		go setupLocalServer()
+		env.LoadValuesEnvFile()
+		go runRouter()
 	}
 }
 
-func load() {
-	env.PrintScan("WELCOME TO THE HELL")
-
-	env.PrintScan("URL (For Local Empty)", &env.URL)
-	env.PrintScan("CONCURRENCY", &env.CONCURRENCY)
-	env.PrintScan("NUMREQUEST", &env.NUMREQUEST)
-}
-
-func setupLocalServer() {
+func runRouter() {
 	err := router.SetupRouter().Run(env.PORT)
-	if err != nil {
-		fmt.Println("Error starting server:", err)
-	}
+	common.PrintError(err)
 }
 
 func requestSender() {

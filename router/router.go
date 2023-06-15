@@ -34,12 +34,13 @@ func numbersListConvertString() []string {
 	for i, num := range liste {
 		numbers[i] = strconv.Itoa(num)
 	}
+
 	return numbers
 }
 
 func numbersList() {
-	if count <= env.NUMREQUEST {
+	if count <= env.NUMBERREQUEST {
 		liste = append(liste, count)
+		count++
 	}
-	count++
 }
