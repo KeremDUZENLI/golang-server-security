@@ -8,40 +8,18 @@ import (
 )
 
 var (
-	DECIDE int
-
 	URL  string
 	PORT string
 
 	CONCURRENCY int
 	NUMREQUEST  int
 
-	COUNTER int
+	COUNTER int = 0
 	LISTE   []int
+	LOOPER  bool = false
 )
 
-func Load() {
-	printScan("WELCOME TO THE HELL")
-	printScan("PRESS 1 FOR LOCAL TEST", &DECIDE)
-
-	if DECIDE == 1 {
-		loadEnv()
-	} else {
-		printScan("URL", &URL)
-	}
-
-	printScan("CONCURRENCY", &CONCURRENCY)
-	printScan("NUMREQUEST", &NUMREQUEST)
-	printScan("PRESS ENTER", nil)
-}
-
-func loadEnv() {
-	godotenv.Load(".env")
-	URL = os.Getenv("URL")
-	PORT = os.Getenv("PORT")
-}
-
-func printScan(varName string, name ...any) {
+func PrintScan(varName string, name ...any) {
 	if len(name) == 0 {
 		fmt.Printf("%s\n", varName)
 	} else {
@@ -57,4 +35,10 @@ func printScan(varName string, name ...any) {
 			fmt.Scanln()
 		}
 	}
+}
+
+func LoadLocalEnvFile() {
+	godotenv.Load(".env")
+	URL = os.Getenv("URL")
+	PORT = os.Getenv("PORT")
 }

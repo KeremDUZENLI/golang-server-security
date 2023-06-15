@@ -7,8 +7,6 @@ import (
 	"sync"
 )
 
-var count int
-
 func SendRequest(wg *sync.WaitGroup, client *http.Client) {
 	defer wg.Done()
 
@@ -18,23 +16,12 @@ func SendRequest(wg *sync.WaitGroup, client *http.Client) {
 		return
 	}
 
-	for {
-		if count >= env.NUMREQUEST {
-			break
-		}
-
+	for env.LOOPER {
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("Error sending request:", err)
 			return
 		}
 		resp.Body.Close()
-
-		requestCounter()
 	}
-}
-
-func requestCounter() {
-	count++
-	fmt.Printf("\n%v. Request\t", count)
 }

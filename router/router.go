@@ -17,18 +17,26 @@ func SetupRouter() *gin.Engine {
 }
 
 func handleRoot(c *gin.Context) {
-	numbers := numbersList()
+	numbers := numbersListConvertString()
 	response := strings.Join(numbers, ".Request\n")
 	c.String(http.StatusOK, response)
 }
 
-func numbersList() []string {
-	env.COUNTER++
-	env.LISTE = append(env.LISTE, env.COUNTER)
+func numbersListConvertString() []string {
+	numbersList()
 
 	numbers := make([]string, len(env.LISTE))
 	for i, num := range env.LISTE {
 		numbers[i] = strconv.Itoa(num)
 	}
 	return numbers
+}
+
+func numbersList() {
+	env.COUNTER++
+
+	if env.NUMREQUEST >= env.COUNTER {
+		env.LISTE = append(env.LISTE, env.COUNTER)
+		env.LOOPER = true
+	}
 }
