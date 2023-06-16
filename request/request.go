@@ -14,8 +14,11 @@ func SendRequest(wg *sync.WaitGroup, client *http.Client) {
 	request, err := httpRequest()
 	common.PrintError(err)
 
-	response := httpResponse(client, request)
-	common.PrintError(response)
+	response, err := httpResponse(client, request)
+	common.PrintError(err)
+
+	err = httpResponseBody(response)
+	common.PrintError(err)
 }
 
 func httpRequest() (*http.Request, error) {
@@ -27,12 +30,16 @@ func httpRequest() (*http.Request, error) {
 	return request, nil
 }
 
-func httpResponse(client *http.Client, request *http.Request) error {
+func httpResponse(client *http.Client, request *http.Request) (*http.Response, error) {
 	response, err := client.Do(request)
 	if err != nil {
-		return errors.New("\n!failed to get response")
+		return nil, errors.New("\n!failed to get response")
 	}
 
+	return response, nil
+}
+
+func httpResponseBody(response *http.Response) error {
 	if responseBody := response.Body.Close(); responseBody != nil {
 		return errors.New("\n!failed to get responseBody")
 	}
